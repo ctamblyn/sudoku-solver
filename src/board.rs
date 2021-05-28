@@ -15,25 +15,24 @@ pub const BOARD_SIZE: usize = SQUARE_SIZE * SQUARE_SIZE;
 /// A representation of a puzzle or solution.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Board {
-    cells: [u8; BOARD_SIZE * BOARD_SIZE],
+    cells: [[u8; BOARD_SIZE]; BOARD_SIZE],
 }
 
 impl Board {
     /// Create a `Board` with the given content.
     ///
-    /// The `cells` parameter is an array slice, in which the cells of the puzzle or solution are
-    /// listed left-to-right, then top-to-bottom.
+    /// The `cells` parameter is a two dimensional array slice.
     ///
     /// ## Example
     ///
     /// ```rust
     /// # fn main() {
     /// # use sudoku_solver::*;
-    /// let board = Board::new(&[0u8; 81]);
+    /// let board = Board::new(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
     /// # println!("{}", board);
     /// # }
     /// ```
-    pub fn new(cells: &[u8; BOARD_SIZE * BOARD_SIZE]) -> Board {
+    pub fn new(cells: &[[u8; BOARD_SIZE]; BOARD_SIZE]) -> Board {
         Board { cells: *cells }
     }
 
@@ -48,22 +47,22 @@ impl Board {
     /// # fn main() {
     /// # use sudoku_solver::*;
     /// let board = Board::new(&[
-    ///     0, 2, 0, 0, 0, 0, 0, 0, 0, // row 1
-    ///     0, 0, 0, 6, 0, 0, 0, 0, 3, // row 2
-    ///     0, 7, 4, 0, 8, 0, 0, 0, 0, // row 3
-    ///     0, 0, 0, 0, 0, 3, 0, 0, 2, // row 4
-    ///     0, 8, 0, 0, 4, 0, 0, 1, 0, // row 5
-    ///     6, 0, 0, 5, 0, 0, 0, 0, 0, // row 6
-    ///     0, 0, 0, 0, 1, 0, 7, 8, 0, // row 7
-    ///     5, 0, 0, 0, 0, 9, 0, 0, 0, // row 8
-    ///     0, 0, 0, 0, 0, 0, 0, 4, 0, // row 9
+    ///     [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
+    ///     [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
+    ///     [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3
+    ///     [0, 0, 0, 0, 0, 3, 0, 0, 2], // row 4
+    ///     [0, 8, 0, 0, 4, 0, 0, 1, 0], // row 5
+    ///     [6, 0, 0, 5, 0, 0, 0, 0, 0], // row 6
+    ///     [0, 0, 0, 0, 1, 0, 7, 8, 0], // row 7
+    ///     [5, 0, 0, 0, 0, 9, 0, 0, 0], // row 8
+    ///     [0, 0, 0, 0, 0, 0, 0, 4, 0], // row 9
     /// ]);
     ///
     /// assert_eq!(board.get_cell(1, 0), 2);
     /// # }
     /// ```
     pub fn get_cell(&self, x: usize, y: usize) -> u8 {
-        self.cells[Self::cell_index(x, y)]
+        self.cells[y][x]
     }
 
     /// Construct a board which is obtained from the input board by modifying a single cell.
@@ -76,19 +75,15 @@ impl Board {
     /// ```rust
     /// # fn main() {
     /// # use sudoku_solver::*;
-    /// let board = Board::new(&[0u8; 81]);
+    /// let board = Board::new(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
     /// let board = board.with_cell(1, 1, 9);
     /// assert_eq!(board.get_cell(1, 1), 9);
     /// # }
     /// ```
     pub fn with_cell(&self, x: usize, y: usize, value: u8) -> Board {
         let mut b = *self;
-        b.cells[Self::cell_index(x, y)] = value;
+        b.cells[y][x] = value;
         b
-    }
-
-    fn cell_index(x: usize, y: usize) -> usize {
-        x + BOARD_SIZE * y
     }
 }
 
@@ -125,15 +120,15 @@ mod tests {
     #[test]
     fn string_rep_of_board_is_correct() {
         let board = Board::new(&[
-            1, 2, 3, 4, 5, 6, 7, 8, 9, // row 1
-            2, 3, 4, 5, 6, 7, 8, 9, 1, // row 2
-            3, 4, 5, 6, 7, 8, 9, 1, 2, // row 3
-            4, 5, 6, 7, 8, 9, 1, 2, 3, // row 4
-            5, 6, 7, 8, 9, 1, 2, 3, 4, // row 5
-            6, 7, 8, 9, 1, 2, 3, 4, 5, // row 6
-            7, 8, 9, 1, 2, 3, 4, 5, 6, // row 7
-            8, 9, 1, 2, 3, 4, 5, 6, 7, // row 8
-            9, 1, 2, 3, 4, 5, 6, 7, 8, // row 9
+            [1, 2, 3, 4, 5, 6, 7, 8, 9], // row 1
+            [2, 3, 4, 5, 6, 7, 8, 9, 1], // row 2
+            [3, 4, 5, 6, 7, 8, 9, 1, 2], // row 3
+            [4, 5, 6, 7, 8, 9, 1, 2, 3], // row 4
+            [5, 6, 7, 8, 9, 1, 2, 3, 4], // row 5
+            [6, 7, 8, 9, 1, 2, 3, 4, 5], // row 6
+            [7, 8, 9, 1, 2, 3, 4, 5, 6], // row 7
+            [8, 9, 1, 2, 3, 4, 5, 6, 7], // row 8
+            [9, 1, 2, 3, 4, 5, 6, 7, 8], // row 9
         ]);
 
         let str_rep = "1 2 3 4 5 6 7 8 9\n\
@@ -149,15 +144,15 @@ mod tests {
         assert_eq!(board.to_string(), str_rep);
 
         let board = Board::new(&[
-            1, 0, 0, 4, 0, 0, 7, 0, 0, // row 1
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 2
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 3
-            4, 0, 0, 7, 0, 0, 1, 0, 0, // row 4
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 5
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 6
-            7, 0, 0, 1, 0, 0, 4, 0, 0, // row 7
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 8
-            0, 0, 0, 0, 0, 0, 0, 0, 0, // row 9
+            [1, 0, 0, 4, 0, 0, 7, 0, 0], // row 1
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3
+            [4, 0, 0, 7, 0, 0, 1, 0, 0], // row 4
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 5
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 6
+            [7, 0, 0, 1, 0, 0, 4, 0, 0], // row 7
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 8
+            [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 9
         ]);
 
         let str_rep = "1 - - 4 - - 7 - -\n\
