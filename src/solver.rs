@@ -104,11 +104,7 @@ fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) ->
     (count, cs)
 }
 
-fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
-    if !assume_valid && !valid(b) {
-        return None;
-    }
-
+fn real_solve(b: &Board) -> Option<Board> {
     if b.complete() {
         return Some(*b);
     }
@@ -137,7 +133,7 @@ fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
     // Try all the possible values for the selected cell.
     for v in 1..=BOARD_SIZE as u8 {
         if (min_candidates & (1 << v)) != 0 {
-            let b2 = real_solve(&b.with_cell(min_x, min_y, v), true);
+            let b2 = real_solve(&b.with_cell(min_x, min_y, v));
             if b2.is_some() {
                 return b2;
             }
@@ -173,5 +169,9 @@ fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
 /// # }
 /// ```
 pub fn solve(b: &Board) -> Option<Board> {
-    real_solve(b, false)
+    if valid(b) {
+        real_solve(b)
+    } else {
+        None
+    }
 }
