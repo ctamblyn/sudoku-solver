@@ -85,49 +85,6 @@ pub fn valid(b: &Board) -> bool {
     true
 }
 
-/// Test whether a board is complete.
-///
-/// A board is regarded as complete if it contains no unfilled cells.
-///
-/// Note that a compete board may not be a valid solution, since the game's constraints may not be
-/// satisfied.
-///
-/// ## Example
-///
-/// ```rust
-/// # fn main() {
-/// # use sudoku_solver::*;
-/// let board = Board::from(&[
-///     [0, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
-///     [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
-///     [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
-///     [8, 2, 6, 1, 9, 5, 3, 4, 7], // row 4
-///     [3, 7, 4, 6, 8, 2, 9, 1, 5], // row 5
-///     [9, 5, 1, 7, 4, 3, 6, 2, 8], // row 6
-///     [5, 1, 9, 3, 2, 6, 8, 7, 4], // row 7
-///     [2, 4, 8, 9, 5, 7, 1, 3, 6], // row 8
-///     [7, 6, 3, 4, 1, 8, 2, 5, 9], // row 9
-/// ]);
-///
-/// assert!(!complete(&board));
-///
-/// let board = board.with_cell(0, 0, 4);
-///
-/// assert!(complete(&board));
-/// # }
-/// ```
-pub fn complete(b: &Board) -> bool {
-    for x in 0..BOARD_SIZE {
-        for y in 0..BOARD_SIZE {
-            if b.get_cell(x, y) == 0 {
-                return false;
-            }
-        }
-    }
-
-    true
-}
-
 fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) -> (usize, u64) {
     let mut count = 0;
     let mut cs = 0;
@@ -152,7 +109,7 @@ fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
         return None;
     }
 
-    if complete(b) {
+    if b.complete() {
         return Some(*b);
     }
 
