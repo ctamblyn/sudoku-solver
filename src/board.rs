@@ -7,8 +7,8 @@
 
 mod tests;
 
-/// The height or width of a "square" of cells within the board.  For standard sudoku puzzles,
-/// this is 3.
+/// The height or width of a "square" of cells within the board.  For standard sudoku puzzles, this
+/// is 3.
 pub const SQUARE_SIZE: usize = 3;
 
 /// The number of cells in a row, column or square.  For standard sudoku puzzles, this is 3.

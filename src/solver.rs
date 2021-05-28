@@ -192,8 +192,8 @@ fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
 
 /// Solve a sudoku puzzle.
 ///
-/// Returns an `Option<Board>` which is either `None`, if no solution could be found,
-/// or a `Some` variant wrapping the first solution found.
+/// Returns an `Option<Board>` which is either `None`, if no solution could be found, or a `Some`
+/// variant wrapping the first solution found.
 ///
 /// ## Example
 ///
