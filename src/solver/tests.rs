@@ -4,7 +4,7 @@ use super::*;
 
 #[test]
 fn duplicate_in_row_is_detected() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 4, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -18,7 +18,7 @@ fn duplicate_in_row_is_detected() {
 
     assert!(!valid(&board));
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 4, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -35,7 +35,7 @@ fn duplicate_in_row_is_detected() {
 
 #[test]
 fn duplicate_in_column_is_detected() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -49,7 +49,7 @@ fn duplicate_in_column_is_detected() {
 
     assert!(!valid(&board));
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [1, 0, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3
@@ -66,7 +66,7 @@ fn duplicate_in_column_is_detected() {
 
 #[test]
 fn duplicate_in_square_is_detected() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -80,7 +80,7 @@ fn duplicate_in_square_is_detected() {
 
     assert!(!valid(&board));
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3
@@ -97,7 +97,7 @@ fn duplicate_in_square_is_detected() {
 
 #[test]
 fn valid_board_is_passed() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -111,7 +111,7 @@ fn valid_board_is_passed() {
 
     assert!(valid(&board));
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 0, 0, 0, 6, 0, 0, 0, 1], // row 1
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3
@@ -125,7 +125,7 @@ fn valid_board_is_passed() {
 
     assert!(valid(&board));
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3
@@ -142,7 +142,7 @@ fn valid_board_is_passed() {
 
 #[test]
 fn detects_incomplete_board() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -159,7 +159,7 @@ fn detects_incomplete_board() {
 
 #[test]
 fn detects_complete_board() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -176,7 +176,7 @@ fn detects_complete_board() {
 
 #[test]
 fn solves_solvable_puzzles() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 3, 5, 2, 0, 9, 7, 8, 0], // row 1
         [6, 0, 2, 5, 0, 1, 4, 0, 3], // row 2
         [1, 9, 0, 8, 0, 4, 0, 6, 2], // row 3
@@ -188,7 +188,7 @@ fn solves_solvable_puzzles() {
         [0, 6, 3, 4, 1, 8, 2, 5, 0], // row 9
     ]);
 
-    let correct_solution = Board::new(&[
+    let correct_solution = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -204,7 +204,7 @@ fn solves_solvable_puzzles() {
 
     assert_eq!(solution.unwrap(), correct_solution);
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 0, 0, 2, 6, 0, 7, 0, 1], // row 1
         [6, 8, 0, 0, 7, 0, 0, 9, 0], // row 2
         [1, 9, 0, 0, 0, 4, 5, 0, 0], // row 3
@@ -216,7 +216,7 @@ fn solves_solvable_puzzles() {
         [7, 0, 3, 0, 1, 8, 0, 0, 0], // row 9
     ]);
 
-    let correct_solution = Board::new(&[
+    let correct_solution = Board::from(&[
         [4, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
         [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
         [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -232,7 +232,7 @@ fn solves_solvable_puzzles() {
 
     assert_eq!(solution.unwrap(), correct_solution);
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
         [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3
@@ -244,7 +244,7 @@ fn solves_solvable_puzzles() {
         [0, 0, 0, 0, 0, 0, 0, 4, 0], // row 9
     ]);
 
-    let correct_solution = Board::new(&[
+    let correct_solution = Board::from(&[
         [1, 2, 6, 4, 3, 7, 9, 5, 8], // row 1
         [8, 9, 5, 6, 2, 1, 4, 7, 3], // row 2
         [3, 7, 4, 9, 8, 5, 1, 2, 6], // row 3
@@ -260,7 +260,7 @@ fn solves_solvable_puzzles() {
 
     assert_eq!(solution.unwrap(), correct_solution);
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
         [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3
@@ -272,7 +272,7 @@ fn solves_solvable_puzzles() {
         [0, 0, 0, 0, 0, 0, 0, 4, 0], // row 9
     ]);
 
-    let correct_solution = Board::new(&[
+    let correct_solution = Board::from(&[
         [1, 2, 6, 4, 3, 7, 9, 5, 8], // row 1
         [8, 9, 5, 6, 2, 1, 4, 7, 3], // row 2
         [3, 7, 4, 9, 8, 5, 1, 2, 6], // row 3
@@ -291,7 +291,7 @@ fn solves_solvable_puzzles() {
 
 #[test]
 fn detects_unsolvable_puzzles() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [3, 0, 0, 2, 6, 0, 7, 0, 1], // row 1
         [6, 8, 0, 0, 7, 0, 0, 9, 0], // row 2
         [1, 9, 0, 0, 0, 4, 5, 0, 0], // row 3
@@ -307,7 +307,7 @@ fn detects_unsolvable_puzzles() {
 
     assert!(solution.is_none());
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
         [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
         [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3

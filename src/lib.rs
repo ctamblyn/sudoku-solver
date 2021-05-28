@@ -8,7 +8,7 @@
 //! use sudoku_solver::*;
 //!
 //! fn main() {
-//!     let board = Board::new(&[
+//!     let board = Board::from(&[
 //!         [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
 //!         [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
 //!         [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3

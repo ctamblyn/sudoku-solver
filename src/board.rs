@@ -21,23 +21,6 @@ pub struct Board {
 }
 
 impl Board {
-    /// Create a `Board` with the given content.
-    ///
-    /// The `cells` parameter is a two dimensional array slice.
-    ///
-    /// ## Example
-    ///
-    /// ```rust
-    /// # fn main() {
-    /// # use sudoku_solver::*;
-    /// let board = Board::new(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
-    /// # println!("{}", board);
-    /// # }
-    /// ```
-    pub fn new(cells: &[[u8; BOARD_SIZE]; BOARD_SIZE]) -> Board {
-        Board { cells: *cells }
-    }
-
     /// Get the contents of the cell at the given coordinates.
     ///
     /// This returns the contents of the cell at column `x` and row `y`.  A zero represents a cell
@@ -48,7 +31,7 @@ impl Board {
     /// ```rust
     /// # fn main() {
     /// # use sudoku_solver::*;
-    /// let board = Board::new(&[
+    /// let board = Board::from(&[
     ///     [0, 2, 0, 0, 0, 0, 0, 0, 0], // row 1
     ///     [0, 0, 0, 6, 0, 0, 0, 0, 3], // row 2
     ///     [0, 7, 4, 0, 8, 0, 0, 0, 0], // row 3
@@ -77,7 +60,7 @@ impl Board {
     /// ```rust
     /// # fn main() {
     /// # use sudoku_solver::*;
-    /// let board = Board::new(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
+    /// let board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
     /// let board = board.with_cell(1, 1, 9);
     /// assert_eq!(board.get_cell(1, 1), 9);
     /// # }
@@ -86,6 +69,26 @@ impl Board {
         let mut b = *self;
         b.cells[y][x] = value;
         b
+    }
+}
+
+/// Construct a `Board` from a 2D array.
+impl From<&[[u8; BOARD_SIZE]; BOARD_SIZE]> for Board {
+    /// Create a `Board` with the given content.
+    ///
+    /// The `cells` parameter is a two dimensional array slice.
+    ///
+    /// ## Example
+    ///
+    /// ```rust
+    /// # fn main() {
+    /// # use sudoku_solver::*;
+    /// let board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
+    /// # println!("{}", board);
+    /// # }
+    /// ```
+    fn from(array_2d: &[[u8; BOARD_SIZE]; BOARD_SIZE]) -> Self {
+        Board { cells: *array_2d }
     }
 }
 

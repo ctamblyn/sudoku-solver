@@ -4,7 +4,7 @@ use super::*;
 
 #[test]
 fn string_rep_of_board_is_correct() {
-    let board = Board::new(&[
+    let board = Board::from(&[
         [1, 2, 3, 4, 5, 6, 7, 8, 9], // row 1
         [2, 3, 4, 5, 6, 7, 8, 9, 1], // row 2
         [3, 4, 5, 6, 7, 8, 9, 1, 2], // row 3
@@ -28,7 +28,7 @@ fn string_rep_of_board_is_correct() {
 
     assert_eq!(board.to_string(), str_rep);
 
-    let board = Board::new(&[
+    let board = Board::from(&[
         [1, 0, 0, 4, 0, 0, 7, 0, 0], // row 1
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 2
         [0, 0, 0, 0, 0, 0, 0, 0, 0], // row 3

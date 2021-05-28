@@ -19,7 +19,7 @@ use super::board::*;
 /// ```rust
 /// # fn main() {
 /// # use sudoku_solver::*;
-/// let board = Board::new(&[[0u8; BOARD_SIZE]; BOARD_SIZE])
+/// let board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE])
 ///     .with_cell(0, 0, 9)
 ///     .with_cell(0, 5, 9);
 ///
@@ -97,7 +97,7 @@ pub fn valid(b: &Board) -> bool {
 /// ```rust
 /// # fn main() {
 /// # use sudoku_solver::*;
-/// let board = Board::new(&[
+/// let board = Board::from(&[
 ///     [0, 3, 5, 2, 6, 9, 7, 8, 1], // row 1
 ///     [6, 8, 2, 5, 7, 1, 4, 9, 3], // row 2
 ///     [1, 9, 7, 8, 3, 4, 5, 6, 2], // row 3
@@ -200,7 +200,7 @@ fn real_solve(b: &Board, assume_valid: bool) -> Option<Board> {
 /// ```rust
 /// # fn main() {
 /// # use sudoku_solver::*;
-/// let board = Board::new(&[
+/// let board = Board::from(&[
 ///     [0, 0, 0, 2, 6, 0, 7, 0, 1], // row 1
 ///     [6, 8, 0, 0, 7, 0, 0, 9, 0], // row 2
 ///     [1, 9, 0, 0, 0, 4, 5, 0, 0], // row 3
