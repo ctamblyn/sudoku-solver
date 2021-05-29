@@ -85,7 +85,7 @@ pub fn valid(b: &Board) -> bool {
     true
 }
 
-fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) -> (usize, u64) {
+fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) -> (usize, u16) {
     let mut count = 0;
     let mut cs = 0;
 
@@ -105,20 +105,21 @@ fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) ->
 }
 
 fn real_solve(b: &Board) -> Option<Board> {
-    if b.complete() {
-        return Some(*b);
-    }
-
     let mut min_x = 0;
     let mut min_y = 0;
     let mut min_candidates = 0;
     let mut min_count = BOARD_SIZE + 1;
 
     // Find the cell with the least number of possible valid values.
-    for x in 0..BOARD_SIZE {
-        for y in 0..BOARD_SIZE {
+    for y in 0..BOARD_SIZE {
+        for x in 0..BOARD_SIZE {
             if b.get_cell(x, y) == 0 {
                 let (count, cs) = valid_choices_for_cell(b, x, y, min_count);
+
+                if count == 0 {
+                    // No valid choices for this empty cell, so we need to backtrack.
+                    return None;
+                }
 
                 if cs != 0 {
                     min_x = x;
@@ -128,6 +129,11 @@ fn real_solve(b: &Board) -> Option<Board> {
                 }
             }
         }
+    }
+
+    if min_count == BOARD_SIZE + 1 {
+        // No cells can be updated, but the board is valid, so it must be solved.
+        return Some(*b);
     }
 
     // Try all the possible values for the selected cell.
@@ -140,6 +146,7 @@ fn real_solve(b: &Board) -> Option<Board> {
         }
     }
 
+    // Nothing worked.
     None
 }
 
