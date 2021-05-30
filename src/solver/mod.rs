@@ -86,23 +86,27 @@ pub fn valid(b: &Board) -> bool {
     true
 }
 
-fn valid_choices_for_cell(b: &Board, x: usize, y: usize, cutoff_count: usize) -> (usize, u16) {
-    let mut count = 0;
-    let mut cs = 0;
+fn valid_choices_for_cell(b: &Board, x: usize, y: usize) -> u16 {
+    let mut cs = 0b11_1111_1110u16;
 
-    for v in 1..=BOARD_SIZE as u8 {
-        if valid(&b.with_cell(x, y, v)) {
-            count += 1;
-            if count >= cutoff_count {
-                cs = 0;
-                break;
-            }
-
-            cs |= 1 << v;
-        }
+    // Check row.
+    for i in 0..BOARD_SIZE {
+        cs &= !(1 << b.get_cell(i, y));
     }
 
-    (count, cs)
+    // Check column.
+    for i in 0..BOARD_SIZE {
+        cs &= !(1 << b.get_cell(x, i));
+    }
+
+    // Check square.
+    let x = SQUARE_SIZE * (x / SQUARE_SIZE);
+    let y = SQUARE_SIZE * (y / SQUARE_SIZE);
+    for i in 0..BOARD_SIZE {
+        cs &= !(1 << b.get_cell(x + (i / 3), y + (i % 3)));
+    }
+
+    cs
 }
 
 fn real_solve(b: &Board) -> Option<Board> {
@@ -115,14 +119,16 @@ fn real_solve(b: &Board) -> Option<Board> {
     for y in 0..BOARD_SIZE {
         for x in 0..BOARD_SIZE {
             if b.get_cell(x, y) == 0 {
-                let (count, cs) = valid_choices_for_cell(b, x, y, min_count);
+                let cs = valid_choices_for_cell(b, x, y);
 
-                if count == 0 {
+                if cs == 0 {
                     // No valid choices for this empty cell, so we need to backtrack.
                     return None;
                 }
 
-                if cs != 0 {
+                let count = cs.count_ones() as usize;
+
+                if count < min_count {
                     min_x = x;
                     min_y = y;
                     min_candidates = cs;
