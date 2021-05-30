@@ -5,6 +5,7 @@
 //! A `Board` represents a nine-by-nine grid of cells.  Each cell contains either a number from 1
 //! to 9, or a zero if the cell is unfilled.
 
+#[cfg(test)]
 mod tests;
 
 /// The height or width of a "square" of cells within the board.  For standard sudoku puzzles, this

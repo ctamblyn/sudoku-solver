@@ -1,5 +1,6 @@
 //! Sudoku solving routines.
 
+#[cfg(test)]
 mod tests;
 
 use super::board::*;
