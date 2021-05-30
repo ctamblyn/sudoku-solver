@@ -53,7 +53,7 @@ impl Board {
     /// Construct a board which is obtained from the input board by modifying a single cell.
     ///
     /// The returned board is the same as the input one, except that the cell at column `x` and row
-    /// `y` it will have the value `value`.
+    /// `y` will contain `value`.
     ///
     /// ## Example
     ///
