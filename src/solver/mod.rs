@@ -118,7 +118,7 @@ fn valid_choices_for_cell(b: &Board, x: usize, y: usize) -> u16 {
     cs
 }
 
-fn real_solve(b: &Board) -> Option<Board> {
+fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {
     let mut min_x = 0;
     let mut min_y = 0;
     let mut min_candidates = 0;
@@ -147,17 +147,23 @@ fn real_solve(b: &Board) -> Option<Board> {
         }
     }
 
-    if min_count == BOARD_SIZE + 1 {
-        // No cells can be updated, but the board is valid, so it must be solved.
-        return Some(*b);
-    }
+    Some((min_x, min_y, min_candidates))
+}
 
-    // Try all the possible values for the selected cell.
-    for v in 1..=BOARD_SIZE as u8 {
-        if (min_candidates & (1 << v)) != 0 {
-            let b2 = real_solve(&b.with_cell(min_x, min_y, v));
-            if b2.is_some() {
-                return b2;
+fn real_solve(b: &Board) -> Option<Board> {
+    if let Some((min_x, min_y, min_candidates)) = cell_with_fewest_candidates(b) {
+        if min_candidates == 0 {
+            // No cells can be updated, but the board is valid, so it must be solved.
+            return Some(*b);
+        }
+
+        // Try all the possible values for the selected cell.
+        for v in 1..=BOARD_SIZE as u8 {
+            if (min_candidates & (1 << v)) != 0 {
+                let b2 = real_solve(&b.with_cell(min_x, min_y, v));
+                if b2.is_some() {
+                    return b2;
+                }
             }
         }
     }
