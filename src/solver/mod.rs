@@ -10,6 +10,7 @@ use super::board::*;
 /// The constraints are:
 ///
 /// * No digit 1-9 is repeated in any given row, column or square.
+/// * Every cell contains a value from 0-9 inclusive.
 ///
 /// Note that zeroes repesent unfilled cells, and do not count as duplicates.
 ///
@@ -40,6 +41,14 @@ pub fn valid(b: &Board) -> bool {
         0x01_0000_0000,
         0x10_0000_0000,
     ];
+
+    for y in 0..BOARD_SIZE {
+        for x in 0..BOARD_SIZE {
+            if b.get_cell(x, y) > 9 {
+                return false;
+            }
+        }
+    }
 
     // Check rows.
     for y in 0..BOARD_SIZE {

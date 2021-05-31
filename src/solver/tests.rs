@@ -1,6 +1,23 @@
 use super::*;
 
 #[test]
+fn invalid_cell_values_are_detected() {
+    let board = Board::from(&[
+        [4, 3, 5, 2, 4, 9, 7, 8, 1],  // row 1
+        [6, 8, 2, 5, 7, 1, 4, 9, 3],  // row 2
+        [1, 9, 7, 8, 3, 4, 5, 6, 2],  // row 3
+        [8, 2, 6, 1, 9, 5, 3, 4, 7],  // row 4
+        [3, 7, 4, 6, 8, 2, 9, 1, 5],  // row 5
+        [9, 5, 1, 7, 4, 3, 6, 2, 8],  // row 6
+        [5, 1, 9, 3, 2, 6, 8, 7, 4],  // row 7
+        [2, 4, 8, 9, 5, 7, 1, 3, 6],  // row 8
+        [7, 6, 3, 4, 1, 8, 2, 5, 10], // row 9
+    ]);
+
+    assert!(!valid(&board));
+}
+
+#[test]
 fn duplicate_in_row_is_detected() {
     let board = Board::from(&[
         [4, 3, 5, 2, 4, 9, 7, 8, 1], // row 1
