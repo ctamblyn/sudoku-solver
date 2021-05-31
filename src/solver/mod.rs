@@ -151,19 +151,23 @@ fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {
 }
 
 fn real_solve(b: &Board) -> Option<Board> {
-    if let Some((min_x, min_y, min_candidates)) = cell_with_fewest_candidates(b) {
+    if let Some((min_x, min_y, mut min_candidates)) = cell_with_fewest_candidates(b) {
         if min_candidates == 0 {
             // No cells can be updated, but the board is valid, so it must be solved.
             return Some(*b);
         }
 
         // Try all the possible values for the selected cell.
-        for v in 1..=BOARD_SIZE as u8 {
-            if (min_candidates & (1 << v)) != 0 {
-                let b2 = real_solve(&b.with_cell(min_x, min_y, v));
-                if b2.is_some() {
-                    return b2;
-                }
+        while min_candidates != 0 {
+            // Get index of lowest set bit.
+            let v = min_candidates.trailing_zeros() as u8;
+
+            // Clear lowest set bit.
+            min_candidates &= min_candidates - 1;
+
+            let b2 = real_solve(&b.with_cell(min_x, min_y, v));
+            if b2.is_some() {
+                return b2;
             }
         }
     }
