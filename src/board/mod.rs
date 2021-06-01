@@ -16,7 +16,7 @@ pub const SQUARE_SIZE: usize = 3;
 pub const BOARD_SIZE: usize = SQUARE_SIZE * SQUARE_SIZE;
 
 /// A representation of a puzzle or solution.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct Board {
     cells: [[u8; BOARD_SIZE]; BOARD_SIZE],
 }
