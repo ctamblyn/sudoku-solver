@@ -12,7 +12,7 @@ mod tests;
 /// is 3.
 pub const SQUARE_SIZE: usize = 3;
 
-/// The number of cells in a row, column or square.  For standard sudoku puzzles, this is 3.
+/// The number of cells in a row, column or square.  For standard sudoku puzzles, this is 9.
 pub const BOARD_SIZE: usize = SQUARE_SIZE * SQUARE_SIZE;
 
 /// A representation of a puzzle or solution.
