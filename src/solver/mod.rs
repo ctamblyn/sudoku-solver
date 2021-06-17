@@ -4,6 +4,7 @@
 mod tests;
 
 use super::board::*;
+use bit_iter::BitIter;
 
 /// Test whether a sudoku board state obeys the contraints of the game.
 ///
@@ -151,29 +152,15 @@ fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {
 }
 
 fn real_solve(b: &Board) -> Option<Board> {
-    if let Some((min_x, min_y, mut min_candidates)) = cell_with_fewest_candidates(b) {
+    cell_with_fewest_candidates(b).and_then(|(min_x, min_y, min_candidates)| {
         if min_candidates == 0 {
             // No cells can be updated, but the board is valid, so it must be solved.
-            return Some(*b);
+            Some(*b)
+        } else {
+            BitIter::from(min_candidates)
+                .find_map(|v| real_solve(&b.with_cell(min_x, min_y, v as u8)))
         }
-
-        // Try all the possible values for the selected cell.
-        while min_candidates != 0 {
-            // Get index of lowest set bit.
-            let v = min_candidates.trailing_zeros() as u8;
-
-            // Clear lowest set bit.
-            min_candidates &= min_candidates - 1;
-
-            let b2 = real_solve(&b.with_cell(min_x, min_y, v));
-            if b2.is_some() {
-                return b2;
-            }
-        }
-    }
-
-    // Nothing worked.
-    None
+    })
 }
 
 /// Solve a sudoku puzzle.
