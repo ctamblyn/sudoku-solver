@@ -95,26 +95,27 @@ impl From<&[[u8; BOARD_SIZE]; BOARD_SIZE]> for Board {
 
 impl std::fmt::Display for Board {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut y_prefix = "";
+        let mut s = String::new();
 
         for y in 0..BOARD_SIZE {
-            write!(f, "{}", y_prefix)?;
-            y_prefix = "\n";
+            if y != 0 {
+                s.push('\n');
+            }
 
-            let mut x_prefix = "";
             for x in 0..BOARD_SIZE {
-                write!(f, "{}", x_prefix)?;
-                x_prefix = " ";
+                if x != 0 {
+                    s.push(' ');
+                }
 
                 let v = self.get_cell(x, y);
-                if v != 0 {
-                    write!(f, "{}", v)?;
+                s.push(if v != 0 {
+                    char::from_digit(v as u32, 10).unwrap()
                 } else {
-                    write!(f, "{}", '-')?;
-                }
+                    '-'
+                });
             }
         }
 
-        Ok(())
+        write!(f, "{}", s)
     }
 }
