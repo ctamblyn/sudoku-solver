@@ -1,6 +1,7 @@
 # Sudoku solver library for Rust
 
 ![Test results](https://github.com/ctamblyn/sudoku-solver/actions/workflows/rust.yml/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/sudoku-solver)](https://crates.io/crates/sudoku-solver)
 
 This library provides a very simple backtracking algorithm for solving sudoku puzzles.
 
