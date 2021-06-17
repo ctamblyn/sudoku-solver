@@ -3,8 +3,12 @@ name = "sudoku-solver"
 version = "0.2.1"
 authors = ["Christian Tamblyn <ctamblyn76@gmail.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Simple backtracking algorithm for solving sudoku."
+license = "MIT"
+documentation = "https://docs.rs/sudoku-solver"
+repository = "https://github.com/ctamblyn/sudoku-solver"
+keywords = ["sudoku", "backtracking"]
+categories = ["algorithms"]
 
 [dev-dependencies]
 criterion = { version = "0.3", features = ["html_reports"] }
