@@ -16,7 +16,7 @@ pub const SQUARE_SIZE: usize = 3;
 pub const BOARD_SIZE: usize = SQUARE_SIZE * SQUARE_SIZE;
 
 /// A representation of a puzzle or solution.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct Board {
     cells: [[u8; BOARD_SIZE]; BOARD_SIZE],
 }
@@ -49,6 +49,22 @@ impl Board {
     /// ```
     pub fn get_cell(&self, x: usize, y: usize) -> u8 {
         self.cells[y][x]
+    }
+
+    /// Set the contents of the cell at the given coordinates to the given value.
+    ///
+    /// ## Example
+    ///
+    /// ```rust
+    /// # fn main() {
+    /// # use sudoku_solver::*;
+    /// let mut board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
+    /// board.set_cell(1, 1, 9);
+    /// assert_eq!(board.get_cell(1, 1), 9);
+    /// # }
+    /// ```
+    pub fn set_cell(&mut self, x: usize, y: usize, value: u8) {
+        self.cells[y][x] = value;
     }
 
     /// Construct a board which is obtained from the input board by modifying a single cell.

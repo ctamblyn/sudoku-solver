@@ -304,3 +304,48 @@ fn detects_unsolvable_puzzles() {
 
     assert!(solution.is_none());
 }
+
+#[test]
+fn finds_multiple_solutions() {
+    let board = Board::from(&[
+        [9, 0, 6, 0, 7, 0, 4, 0, 3], // row 1
+        [0, 0, 0, 4, 0, 0, 2, 0, 0], // row 2
+        [0, 7, 0, 0, 2, 3, 0, 1, 0], // row 3
+        [5, 0, 0, 0, 0, 0, 1, 0, 0], // row 4
+        [0, 4, 0, 2, 0, 8, 0, 6, 0], // row 5
+        [0, 0, 3, 0, 0, 0, 0, 0, 5], // row 6
+        [0, 3, 0, 7, 0, 0, 0, 5, 0], // row 7
+        [0, 0, 7, 0, 0, 5, 0, 0, 0], // row 8
+        [4, 0, 5, 0, 1, 0, 7, 0, 8], // row 9
+    ]);
+
+    let solution_1 = Board::from(&[
+        [9, 2, 6, 5, 7, 1, 4, 8, 3], // row 1
+        [3, 5, 1, 4, 8, 6, 2, 7, 9], // row 2
+        [8, 7, 4, 9, 2, 3, 5, 1, 6], // row 3
+        [5, 8, 2, 3, 6, 7, 1, 9, 4], // row 4
+        [1, 4, 9, 2, 5, 8, 3, 6, 7], // row 5
+        [7, 6, 3, 1, 4, 9, 8, 2, 5], // row 6
+        [2, 3, 8, 7, 9, 4, 6, 5, 1], // row 7
+        [6, 1, 7, 8, 3, 5, 9, 4, 2], // row 8
+        [4, 9, 5, 6, 1, 2, 7, 3, 8], // row 9
+    ]);
+
+    let solution_2 = Board::from(&[
+        [9, 2, 6, 5, 7, 1, 4, 8, 3], // row 1
+        [3, 5, 1, 4, 8, 6, 2, 7, 9], // row 2
+        [8, 7, 4, 9, 2, 3, 5, 1, 6], // row 3
+        [5, 8, 2, 3, 6, 7, 1, 9, 4], // row 4
+        [1, 4, 9, 2, 5, 8, 3, 6, 7], // row 5
+        [7, 6, 3, 1, 9, 4, 8, 2, 5], // row 6
+        [2, 3, 8, 7, 4, 9, 6, 5, 1], // row 7
+        [6, 1, 7, 8, 3, 5, 9, 4, 2], // row 8
+        [4, 9, 5, 6, 1, 2, 7, 3, 8], // row 9
+    ]);
+
+    let mut solutions = SolutionIter::new(&board);
+
+    assert_eq!(solutions.next(), Some(solution_1));
+    assert_eq!(solutions.next(), Some(solution_2));
+    assert_eq!(solutions.next(), None);
+}

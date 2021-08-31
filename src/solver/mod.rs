@@ -3,6 +3,8 @@
 #[cfg(test)]
 mod tests;
 
+use std::iter::FusedIterator;
+
 use super::board::*;
 use bit_iter::BitIter;
 
@@ -151,18 +153,6 @@ fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {
     Some((min_x, min_y, min_candidates))
 }
 
-fn real_solve(b: &Board) -> Option<Board> {
-    cell_with_fewest_candidates(b).and_then(|(min_x, min_y, min_candidates)| {
-        if min_candidates == 0 {
-            // No cells can be updated, but the board is valid, so it must be solved.
-            Some(*b)
-        } else {
-            BitIter::from(min_candidates)
-                .find_map(|v| real_solve(&b.with_cell(min_x, min_y, v as u8)))
-        }
-    })
-}
-
 /// Solve a sudoku puzzle.
 ///
 /// Returns an `Option<Board>` which is either `None`, if no solution could be found, or a `Some`
@@ -189,9 +179,159 @@ fn real_solve(b: &Board) -> Option<Board> {
 /// # }
 /// ```
 pub fn solve(b: &Board) -> Option<Board> {
-    if valid(b) {
-        real_solve(b)
-    } else {
-        None
+    SolutionIter::new(b).next()
+}
+
+/// An iterator which produces the set of solutions to a sudoku-style puzzle.
+///
+/// Strictly speaking, sudokus should have only one solution.  However, it is possible to construct
+/// sudoku-style puzzles with multiple solutions.  `SolutionIter` provides a means of generating
+/// such solutions lazily.
+///
+/// ## Example
+///
+/// ```rust
+/// # fn main() {
+/// # use sudoku_solver::*;
+/// let mut solutions = SolutionIter::new(&Board::from(&[
+///     [9, 0, 6, 0, 7, 0, 4, 0, 3], // row 1
+///     [0, 0, 0, 4, 0, 0, 2, 0, 0], // row 2
+///     [0, 7, 0, 0, 2, 3, 0, 1, 0], // row 3
+///     [5, 0, 0, 0, 0, 0, 1, 0, 0], // row 4
+///     [0, 4, 0, 2, 0, 8, 0, 6, 0], // row 5
+///     [0, 0, 3, 0, 0, 0, 0, 0, 5], // row 6
+///     [0, 3, 0, 7, 0, 0, 0, 5, 0], // row 7
+///     [0, 0, 7, 0, 0, 5, 0, 0, 0], // row 8
+///     [4, 0, 5, 0, 1, 0, 7, 0, 8], // row 9
+/// ]));
+///
+/// assert_eq!(solutions.next(), Some(Board::from(&[
+///     [9, 2, 6, 5, 7, 1, 4, 8, 3], // row 1
+///     [3, 5, 1, 4, 8, 6, 2, 7, 9], // row 2
+///     [8, 7, 4, 9, 2, 3, 5, 1, 6], // row 3
+///     [5, 8, 2, 3, 6, 7, 1, 9, 4], // row 4
+///     [1, 4, 9, 2, 5, 8, 3, 6, 7], // row 5
+///     [7, 6, 3, 1, 4, 9, 8, 2, 5], // row 6
+///     [2, 3, 8, 7, 9, 4, 6, 5, 1], // row 7
+///     [6, 1, 7, 8, 3, 5, 9, 4, 2], // row 8
+///     [4, 9, 5, 6, 1, 2, 7, 3, 8], // row 9
+/// ])));
+///
+/// assert_eq!(solutions.next(), Some(Board::from(&[
+///     [9, 2, 6, 5, 7, 1, 4, 8, 3], // row 1
+///     [3, 5, 1, 4, 8, 6, 2, 7, 9], // row 2
+///     [8, 7, 4, 9, 2, 3, 5, 1, 6], // row 3
+///     [5, 8, 2, 3, 6, 7, 1, 9, 4], // row 4
+///     [1, 4, 9, 2, 5, 8, 3, 6, 7], // row 5
+///     [7, 6, 3, 1, 9, 4, 8, 2, 5], // row 6
+///     [2, 3, 8, 7, 4, 9, 6, 5, 1], // row 7
+///     [6, 1, 7, 8, 3, 5, 9, 4, 2], // row 8
+///     [4, 9, 5, 6, 1, 2, 7, 3, 8], // row 9
+/// ])));
+///
+/// assert_eq!(solutions.next(), None);
+/// # }
+/// ```
+#[derive(Debug)]
+pub struct SolutionIter {
+    first: bool,
+    board: Board,
+    stack: Vec<(usize, usize, BitIter<u16>)>,
+}
+
+impl SolutionIter {
+    /// Construct a `SolutionIter` value from a [`Board`].
+    ///
+    /// ## Example
+    ///
+    /// ```rust
+    /// # fn main() {
+    /// # use sudoku_solver::*;
+    /// let board = Board::from(&[
+    ///     [9, 0, 6, 0, 7, 0, 4, 0, 3], // row 1
+    ///     [0, 0, 0, 4, 0, 0, 2, 0, 0], // row 2
+    ///     [0, 7, 0, 0, 2, 3, 0, 1, 0], // row 3
+    ///     [5, 0, 0, 0, 0, 0, 1, 0, 0], // row 4
+    ///     [0, 4, 0, 2, 0, 8, 0, 6, 0], // row 5
+    ///     [0, 0, 3, 0, 0, 0, 0, 0, 5], // row 6
+    ///     [0, 3, 0, 7, 0, 0, 0, 5, 0], // row 7
+    ///     [0, 0, 7, 0, 0, 5, 0, 0, 0], // row 8
+    ///     [4, 0, 5, 0, 1, 0, 7, 0, 8], // row 9
+    /// ]);
+    ///
+    /// let solutions = SolutionIter::new(&board);
+    ///
+    /// assert_eq!(solutions.count(), 2);
+    /// # }
+    /// ```
+    pub fn new(board: &Board) -> Self {
+        Self {
+            first: true,
+            board: *board,
+            stack: Vec::with_capacity(BOARD_SIZE * BOARD_SIZE),
+        }
     }
 }
+
+/// `From` implementation for `SolutionIter`.
+impl From<Board> for SolutionIter {
+    fn from(board: Board) -> Self {
+        Self::new(&board)
+    }
+}
+
+/// `Iterator` implementation for `SolutionIter`.
+impl Iterator for SolutionIter {
+    type Item = Board;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.first {
+            self.first = false;
+
+            if valid(&self.board) {
+                if let Some((x, y, values)) = cell_with_fewest_candidates(&self.board) {
+                    if values == 0 {
+                        return Some(self.board);
+                    }
+
+                    self.stack.push((x, y, values.into()));
+                }
+            }
+        }
+
+        if let Some((mut x, mut y, mut values)) = self.stack.pop() {
+            loop {
+                if let Some(value) = values.next() {
+                    self.board.set_cell(x, y, value as u8);
+
+                    if let Some(cs) = cell_with_fewest_candidates(&self.board) {
+                        self.stack.push((x, y, values));
+
+                        if cs.2 == 0 {
+                            return Some(self.board);
+                        }
+
+                        x = cs.0;
+                        y = cs.1;
+                        values = cs.2.into();
+                    }
+                } else {
+                    self.board.set_cell(x, y, 0);
+
+                    if let Some(cs) = self.stack.pop() {
+                        x = cs.0;
+                        y = cs.1;
+                        values = cs.2;
+                    } else {
+                        return None;
+                    }
+                }
+            }
+        } else {
+            None
+        }
+    }
+}
+
+/// `FusedIterator` implementation for `SolutionIter`.
+impl FusedIterator for SolutionIter {}
