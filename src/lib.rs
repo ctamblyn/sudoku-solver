@@ -54,7 +54,7 @@
 //! # }
 //! ```
 
-#![doc(html_root_url = "https://docs.rs/sudoku-solver/0.2.2")]
+#![doc(html_root_url = "https://docs.rs/sudoku-solver/0.3.0")]
 
 pub mod board;
 pub mod solver;
