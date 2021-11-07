@@ -18,4 +18,4 @@ name = "solver_benchmarks"
 harness = false
 
 [dependencies]
-bit-iter = "0.1"
+bit-iter = "1.0"
