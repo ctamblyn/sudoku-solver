@@ -83,11 +83,11 @@ pub fn valid(b: &Board) -> bool {
     for square in 0..BOARD_SIZE {
         let mut acc = 0;
 
-        let x = SQUARE_SIZE * (square / SQUARE_SIZE);
-        let y = SQUARE_SIZE * (square % SQUARE_SIZE);
+        let x = SQUARE_SIZE * (square % SQUARE_SIZE);
+        let y = SQUARE_SIZE * (square / SQUARE_SIZE);
 
         for i in 0..BOARD_SIZE {
-            acc += PRECALC_MASKS[b.get_cell(x + (i / 3), y + (i % 3)) as usize];
+            acc += PRECALC_MASKS[b.get_cell(x + (i % 3), y + (i / 3)) as usize];
         }
 
         if (acc & 0xee_eeee_eee0) != 0 {
