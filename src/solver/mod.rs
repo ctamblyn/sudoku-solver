@@ -101,21 +101,14 @@ pub fn valid(b: &Board) -> bool {
 fn valid_choices_for_cell(b: &Board, x: usize, y: usize) -> u16 {
     let mut cs = 0b11_1111_1110u16;
 
-    // Check row.
-    for i in 0..BOARD_SIZE {
-        cs &= !(1 << b.get_cell(i, y));
-    }
+    let xs = SQUARE_SIZE * (x / SQUARE_SIZE);
+    let ys = SQUARE_SIZE * (y / SQUARE_SIZE);
 
-    // Check column.
+    // Check row, column and square.
     for i in 0..BOARD_SIZE {
         cs &= !(1 << b.get_cell(x, i));
-    }
-
-    // Check square.
-    let x = SQUARE_SIZE * (x / SQUARE_SIZE);
-    let y = SQUARE_SIZE * (y / SQUARE_SIZE);
-    for i in 0..BOARD_SIZE {
-        cs &= !(1 << b.get_cell(x + (i / 3), y + (i % 3)));
+        cs &= !(1 << b.get_cell(i, y));
+        cs &= !(1 << b.get_cell(xs + (i % 3), ys + (i / 3)));
     }
 
     cs
