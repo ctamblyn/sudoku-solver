@@ -133,7 +133,10 @@ fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {
 
                 let count = cs.count_ones() as usize;
 
-                if count < min_count {
+                if count == 1 {
+                    // Can't do better than this.
+                    return Some((x, y, cs));
+                } else if count < min_count {
                     min_x = x;
                     min_y = y;
                     min_candidates = cs;
