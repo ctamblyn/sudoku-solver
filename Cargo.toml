@@ -11,7 +11,7 @@ keywords = ["sudoku", "backtracking"]
 categories = ["algorithms"]
 
 [dev-dependencies]
-criterion = { version = "0.3", features = ["html_reports"] }
+criterion = { version = "0.5.1", features = ["html_reports"] }
 
 [[bench]]
 name = "solver_benchmarks"
