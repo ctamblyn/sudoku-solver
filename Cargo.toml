@@ -2,7 +2,7 @@
 name = "sudoku-solver"
 version = "0.5.0"                                                 # remember to update html_root_url in lib.rs
 authors = ["Christian Tamblyn <ctamblyn76@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "Simple backtracking algorithm for solving sudoku."
 license = "MIT"
 documentation = "https://docs.rs/sudoku-solver"
