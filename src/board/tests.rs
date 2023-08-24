@@ -27,19 +27,6 @@ fn set_cell_works() {
 }
 
 #[test]
-fn with_cell_works() {
-    let board = Board::default();
-
-    for y in 0..BOARD_SIZE {
-        for x in 0..BOARD_SIZE {
-            let new_board = board.with_cell(x, y, 9);
-            assert_eq!(new_board.get_cell(x, y), 9);
-            assert_eq!(board.get_cell(x, y), 0);
-        }
-    }
-}
-
-#[test]
 fn string_rep_of_board_is_correct() {
     let board = Board::from(&[
         [1, 2, 3, 4, 5, 6, 7, 8, 9], // row 1

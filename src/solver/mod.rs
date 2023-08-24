@@ -24,9 +24,9 @@ use bit_iter::BitIter;
 /// ```rust
 /// # fn main() {
 /// # use sudoku_solver::*;
-/// let board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE])
-///     .with_cell(0, 0, 9)
-///     .with_cell(0, 5, 9);
+/// let mut board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
+/// board.set_cell(0, 0, 9);
+/// board.set_cell(0, 5, 9);
 ///
 /// assert!(!valid(&board));
 /// # }

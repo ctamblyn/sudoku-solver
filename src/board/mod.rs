@@ -66,27 +66,6 @@ impl Board {
     pub fn set_cell(&mut self, x: usize, y: usize, value: u8) {
         self.cells[y][x] = value;
     }
-
-    /// Construct a board which is obtained from the input board by modifying a single cell.
-    ///
-    /// The returned board is the same as the input one, except that the cell at column `x` and row
-    /// `y` will contain `value`.
-    ///
-    /// ## Example
-    ///
-    /// ```rust
-    /// # fn main() {
-    /// # use sudoku_solver::*;
-    /// let board = Board::from(&[[0u8; BOARD_SIZE]; BOARD_SIZE]);
-    /// let board = board.with_cell(1, 1, 9);
-    /// assert_eq!(board.get_cell(1, 1), 9);
-    /// # }
-    /// ```
-    pub fn with_cell(&self, x: usize, y: usize, value: u8) -> Board {
-        let mut b = *self;
-        b.cells[y][x] = value;
-        b
-    }
 }
 
 /// Construct a `Board` from a 2D array.
