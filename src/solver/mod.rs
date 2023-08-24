@@ -99,7 +99,7 @@ pub fn valid(b: &Board) -> bool {
 }
 
 fn valid_choices_for_cell(b: &Board, x: usize, y: usize) -> u16 {
-    let mut cs = 0b000_000_000_1;
+    let mut cs = 0b00_0000_0001;
 
     let xs = SQUARE_SIZE * (x / SQUARE_SIZE);
     let ys = SQUARE_SIZE * (y / SQUARE_SIZE);
@@ -112,7 +112,7 @@ fn valid_choices_for_cell(b: &Board, x: usize, y: usize) -> u16 {
     }
 
     // Invert the mask to indicate which choices are still available.
-    cs ^ 0b111_111_111_1u16
+    cs ^ 0b11_1111_1111u16
 }
 
 fn cell_with_fewest_candidates(b: &Board) -> Option<(usize, usize, u16)> {

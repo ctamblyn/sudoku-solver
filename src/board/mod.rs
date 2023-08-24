@@ -99,9 +99,9 @@ impl From<&[[u8; BOARD_SIZE]; BOARD_SIZE]> for Board {
     /// ```
     fn from(array_2d: &[[u8; BOARD_SIZE]; BOARD_SIZE]) -> Self {
         let mut board = Board::default();
-        for y in 0..BOARD_SIZE {
-            for x in 0..BOARD_SIZE {
-                board.set_cell(x, y, array_2d[y][x]);
+        for (y, row) in array_2d.iter().enumerate() {
+            for (x, item) in row.iter().enumerate() {
+                board.set_cell(x, y, *item);
             }
         }
         board
@@ -111,7 +111,7 @@ impl From<&[[u8; BOARD_SIZE]; BOARD_SIZE]> for Board {
 impl Default for Board {
     fn default() -> Self {
         Board {
-            cells: [[0b000_000_000_1; BOARD_SIZE]; BOARD_SIZE],
+            cells: [[0b00_0000_0001; BOARD_SIZE]; BOARD_SIZE],
         }
     }
 }
