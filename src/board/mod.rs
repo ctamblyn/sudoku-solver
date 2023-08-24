@@ -16,9 +16,9 @@ pub const SQUARE_SIZE: usize = 3;
 pub const BOARD_SIZE: usize = SQUARE_SIZE * SQUARE_SIZE;
 
 /// A representation of a puzzle or solution.
-#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub struct Board {
-    cells: [[u8; BOARD_SIZE]; BOARD_SIZE],
+    cells: [[u16; BOARD_SIZE]; BOARD_SIZE],
 }
 
 impl Board {
@@ -47,8 +47,21 @@ impl Board {
     /// assert_eq!(board.get_cell(1, 0), 2);
     /// # }
     /// ```
+    #[inline]
     pub fn get_cell(&self, x: usize, y: usize) -> u8 {
+        self.get_cell_as_mask(x, y).trailing_zeros() as u8
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub(crate) fn get_cell_as_mask(&self, x: usize, y: usize) -> u16 {
         self.cells[y][x]
+    }
+
+    #[doc(hidden)]
+    #[inline]
+    pub(crate) fn set_cell_as_mask(&mut self, x: usize, y: usize, value: u16) {
+        self.cells[y][x] = value;
     }
 
     /// Set the contents of the cell at the given coordinates to the given value.
@@ -63,8 +76,9 @@ impl Board {
     /// assert_eq!(board.get_cell(1, 1), 9);
     /// # }
     /// ```
+    #[inline]
     pub fn set_cell(&mut self, x: usize, y: usize, value: u8) {
-        self.cells[y][x] = value;
+        self.set_cell_as_mask(x, y, 1 << value);
     }
 }
 
@@ -84,7 +98,21 @@ impl From<&[[u8; BOARD_SIZE]; BOARD_SIZE]> for Board {
     /// # }
     /// ```
     fn from(array_2d: &[[u8; BOARD_SIZE]; BOARD_SIZE]) -> Self {
-        Board { cells: *array_2d }
+        let mut board = Board::default();
+        for y in 0..BOARD_SIZE {
+            for x in 0..BOARD_SIZE {
+                board.set_cell(x, y, array_2d[y][x]);
+            }
+        }
+        board
+    }
+}
+
+impl Default for Board {
+    fn default() -> Self {
+        Board {
+            cells: [[0b000_000_000_1; BOARD_SIZE]; BOARD_SIZE],
+        }
     }
 }
 

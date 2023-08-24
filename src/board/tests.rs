@@ -7,8 +7,33 @@ fn default_board_is_empty() {
     for y in 0..BOARD_SIZE {
         for x in 0..BOARD_SIZE {
             assert_eq!(board.get_cell(x, y), 0);
+            assert_eq!(board.get_cell_as_mask(x, y), 0b000_000_000_1);
         }
     }
+}
+
+#[test]
+fn get_cell_works() {
+    let mut board = Board::default();
+    board.set_cell(2, 2, 0);
+    board.set_cell(2, 3, 8);
+    board.set_cell(2, 4, 9);
+
+    assert_eq!(board.get_cell(2, 2), 0);
+    assert_eq!(board.get_cell(2, 3), 8);
+    assert_eq!(board.get_cell(2, 4), 9);
+}
+
+#[test]
+fn get_cell_as_mask_works() {
+    let mut board = Board::default();
+    board.set_cell(2, 2, 0);
+    board.set_cell(2, 3, 8);
+    board.set_cell(2, 4, 9);
+
+    assert_eq!(board.get_cell_as_mask(2, 2), 0b000_000_000_1);
+    assert_eq!(board.get_cell_as_mask(2, 3), 0b010_000_000_0);
+    assert_eq!(board.get_cell_as_mask(2, 4), 0b100_000_000_0);
 }
 
 #[test]
@@ -21,6 +46,21 @@ fn set_cell_works() {
             assert_eq!(board.get_cell(x, y), 9);
 
             board.set_cell(x, y, 0);
+            assert_eq!(board.get_cell(x, y), 0);
+        }
+    }
+}
+
+#[test]
+fn set_cell_as_mask_works() {
+    let mut board = Board::default();
+
+    for y in 0..BOARD_SIZE {
+        for x in 0..BOARD_SIZE {
+            board.set_cell_as_mask(x, y, 0b100_000_000_0);
+            assert_eq!(board.get_cell(x, y), 9);
+
+            board.set_cell_as_mask(x, y, 0b000_000_000_1);
             assert_eq!(board.get_cell(x, y), 0);
         }
     }
