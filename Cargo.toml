@@ -1,6 +1,6 @@
 [package]
 name = "sudoku-solver"
-version = "0.6.0"                                                 # remember to update html_root_url in lib.rs
+version = "0.6.1" # remember to update html_root_url in lib.rs
 authors = ["Christian Tamblyn <ctamblyn76@gmail.com>"]
 edition = "2021"
 description = "Simple backtracking algorithm for solving sudoku."
