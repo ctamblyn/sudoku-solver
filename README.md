@@ -61,3 +61,13 @@ fn main() {
     }
 }
 ```
+
+## Minimum supported Rust version (MSRV) policy
+
+`sudoku-solver`'s current minimum supported Rust version (MSRV) is **1.60.0**.
+
+`sudoku-solver` is guaranteed to compile with that version.  It might also
+compile with older versions, but that could change in a future patch release.
+
+If the MSRV of `sudoku-solver` changes, that will be done in a _minor_ version
+release (e.g. 0.6.x -> 0.7.0).
