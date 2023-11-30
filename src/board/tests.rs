@@ -1,6 +1,7 @@
 use super::*;
 
 #[test]
+#[allow(clippy::unusual_byte_groupings)]
 fn default_board_is_empty() {
     let board = Board::default();
 
@@ -25,6 +26,7 @@ fn get_cell_works() {
 }
 
 #[test]
+#[allow(clippy::unusual_byte_groupings)]
 fn get_cell_as_mask_works() {
     let mut board = Board::default();
     board.set_cell(2, 2, 0);
@@ -52,6 +54,7 @@ fn set_cell_works() {
 }
 
 #[test]
+#[allow(clippy::unusual_byte_groupings)]
 fn set_cell_as_mask_works() {
     let mut board = Board::default();
 
